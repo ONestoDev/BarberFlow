@@ -150,8 +150,6 @@ Ela deverá permitir:
 
 Somente isso.
 
-E isso já será um excelente produto.
-
 ---
 
 # O que define o sucesso da versão 1?
