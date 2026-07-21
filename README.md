@@ -292,6 +292,77 @@ Resposta esperada:
 }
 ```
 
+Autenticação em desenvolvimento:
+
+```http
+POST /api/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin@example.com&password=sua_senha
+```
+
+Rotas de usuários:
+
+```http
+GET  /api/v1/users/me
+GET  /api/v1/users       # somente ADMIN
+POST /api/v1/users       # somente ADMIN
+```
+
+Rotas de clientes, disponíveis para `ADMIN` e `BARBER`:
+
+```http
+GET    /api/v1/customers
+POST   /api/v1/customers
+GET    /api/v1/customers/{id}
+PATCH  /api/v1/customers/{id}
+DELETE /api/v1/customers/{id}
+```
+
+A listagem aceita pesquisa e paginação com `q`, `offset` e `limit`.
+
+Rotas de barbeiros:
+
+```http
+GET   /api/v1/barbers
+POST  /api/v1/barbers                         # somente ADMIN
+GET   /api/v1/barbers/{id}
+PATCH /api/v1/barbers/{id}                    # somente ADMIN
+GET   /api/v1/barbers/{id}/unavailabilities
+POST  /api/v1/barbers/{id}/unavailabilities  # somente ADMIN
+```
+
+As jornadas usam dias da semana de `0` (segunda-feira) a `6` (domingo).
+
+Rotas do catálogo de serviços:
+
+```http
+GET  /api/v1/service-categories
+POST /api/v1/service-categories       # somente ADMIN
+GET    /api/v1/services
+POST   /api/v1/services               # somente ADMIN
+GET    /api/v1/services/{id}
+PATCH  /api/v1/services/{id}          # somente ADMIN
+DELETE /api/v1/services/{id}          # somente ADMIN
+```
+
+Preços são armazenados como valores decimais e a duração é informada em minutos.
+
+Rotas de agendamentos da Sprint 2:
+
+```http
+GET   /api/v1/appointments?starts_at=...&ends_at=...
+GET   /api/v1/appointments/availability?barber_id=...&date=...&service_ids=...
+POST  /api/v1/appointments
+GET   /api/v1/appointments/{id}
+PATCH /api/v1/appointments/{id}/reschedule
+PATCH /api/v1/appointments/{id}/cancel
+PATCH /api/v1/appointments/{id}/status
+```
+
+Os horários recebidos devem conter fuso horário. Internamente, todas as datas são
+armazenadas em UTC e validadas contra `APP_TIMEZONE`.
+
 ---
 
 ## 🚀 Como executar o backend
@@ -308,10 +379,10 @@ Resposta esperada:
 git clone https://github.com/ONestoDev/BarberFlow.git
 ```
 
-### Acesse o backend
+### Acesse o projeto
 
 ```bash
-cd BarberFlow/backend
+cd BarberFlow
 ```
 
 ### Crie o ambiente virtual
@@ -333,7 +404,7 @@ python -m venv .venv
 ### Instale as dependências
 
 ```bash
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 ### Configure as variáveis de ambiente
@@ -343,17 +414,31 @@ Crie o arquivo `.env` usando o modelo `.env.example`.
 ```env
 APP_NAME=BarberFlow
 APP_ENV=development
+APP_TIMEZONE=America/Sao_Paulo
+APPOINTMENT_SLOT_INTERVAL_MINUTES=15
 
-DATABASE_URL=postgresql://usuario:senha@localhost:5432/barberflow
+DATABASE_URL=postgresql+psycopg://usuario:senha@localhost:5432/barberflow
 
 JWT_SECRET=substitua_por_uma_chave_segura
 JWT_ALGORITHM=HS256
 JWT_EXPIRES_IN_MINUTES=60
 ```
 
+### Prepare o banco e crie o administrador inicial
+
+Com o PostgreSQL em execução:
+
+```powershell
+cd backend
+..\.venv\Scripts\alembic.exe upgrade head
+..\.venv\Scripts\python.exe -m src.scripts.create_admin --name "Administrador" --email admin@example.com
+```
+
+A senha será solicitada de forma interativa e não ficará registrada no histórico do terminal.
+
 ### Execute a API
 
-```bash
+```powershell
 uvicorn src.main:app --reload
 ```
 
@@ -430,6 +515,13 @@ CUSTOMER
 
 ## 🗺️ Roadmap
 
+### Situação das sprints
+
+- **Sprint 0:** descoberta, requisitos e arquitetura — concluída.
+- **Sprint 1:** autenticação, usuários, clientes, barbeiros e serviços — concluída.
+- **Sprint 2:** agenda e ciclo do atendimento — concluída.
+- **Sprint 3:** pagamentos e financeiro — próxima, pausada antes do início.
+
 ### Release 0.1
 
 * [x] visão do produto;
@@ -440,12 +532,12 @@ CUSTOMER
 * [x] base do backend;
 * [x] conexão com banco;
 * [x] endpoint de saúde;
-* [ ] autenticação;
-* [ ] usuários;
-* [ ] clientes;
-* [ ] barbeiros;
-* [ ] serviços;
-* [ ] agendamentos;
+* [x] autenticação;
+* [x] usuários;
+* [x] clientes;
+* [x] barbeiros;
+* [x] serviços;
+* [x] agendamentos;
 * [ ] pagamentos;
 * [ ] financeiro;
 * [ ] dashboard;

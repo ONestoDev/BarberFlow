@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String, Text, Enum, DateTime
+from sqlalchemy import Column, String, Text, Enum
 from sqlalchemy.dialects.postgresql import UUID
 
 from src.shared.database.connection import Base
@@ -21,4 +21,4 @@ class User(Base, TimestampMixin, SoftDeleteMixin):
     email = Column(String(160), nullable=False, unique=True, index=True)
     password_hash = Column(Text, nullable=False)
 
-    role = Column(Enum(UserRole), nullable=False)
+    role = Column(Enum(UserRole, name="user_role"), nullable=False)

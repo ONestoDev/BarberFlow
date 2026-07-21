@@ -7,6 +7,11 @@ from alembic import context
 
 from src.shared.config.settings import settings
 from src.shared.database.connection import Base
+from src.modules.users import models  # noqa: F401
+from src.modules.customers import models as customer_models  # noqa: F401
+from src.modules.barbers import models as barber_models  # noqa: F401
+from src.modules.services import models as service_models  # noqa: F401
+from src.modules.appointments import models as appointment_models  # noqa: F401
 
 config = context.config
 
