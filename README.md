@@ -363,6 +363,37 @@ PATCH /api/v1/appointments/{id}/status
 Os horários recebidos devem conter fuso horário. Internamente, todas as datas são
 armazenadas em UTC e validadas contra `APP_TIMEZONE`.
 
+Rotas de pagamentos da Sprint 3:
+
+```http
+POST /api/v1/appointments/{id}/payment
+GET  /api/v1/appointments/{id}/payment
+```
+
+Cada atendimento aceita um único pagamento integral. O desconto é registrado
+separadamente e o pagamento cria uma entrada financeira na mesma transação.
+
+Rotas financeiras, disponíveis somente para `ADMIN`:
+
+```http
+POST /api/v1/finance/transactions
+GET  /api/v1/finance/transactions?starts_at=...&ends_at=...
+GET  /api/v1/finance/summary?starts_at=...&ends_at=...
+POST /api/v1/finance/transactions/{id}/corrections
+```
+
+Movimentações financeiras são imutáveis. Erros são corrigidos por um
+contralançamento vinculado ao registro original.
+
+Dashboard administrativo:
+
+```http
+GET /api/v1/dashboard/summary?starts_at=...&ends_at=...
+```
+
+O resumo apresenta faturamento recebido, atendimentos concluídos, novos clientes,
+serviços mais vendidos e o barbeiro com maior faturamento no período.
+
 ---
 
 ## 🚀 Como executar o backend
@@ -452,16 +483,16 @@ http://localhost:8000/docs
 
 ## 🧪 Testes
 
-Execute:
+Execute a partir da raiz do projeto:
 
-```bash
-pytest
+```powershell
+.\.venv\Scripts\python.exe -m pytest
 ```
 
 Com relatório de cobertura:
 
-```bash
-pytest --cov=src
+```powershell
+.\.venv\Scripts\python.exe -m pytest --cov=src
 ```
 
 ---
@@ -520,7 +551,9 @@ CUSTOMER
 - **Sprint 0:** descoberta, requisitos e arquitetura — concluída.
 - **Sprint 1:** autenticação, usuários, clientes, barbeiros e serviços — concluída.
 - **Sprint 2:** agenda e ciclo do atendimento — concluída.
-- **Sprint 3:** pagamentos e financeiro — próxima, pausada antes do início.
+- **Sprint 3:** pagamentos e financeiro — concluída.
+- **Sprint 4:** dashboard e indicadores — concluída.
+- **Sprint 5:** frontend administrativo — próxima, pausada antes do início.
 
 ### Release 0.1
 
@@ -538,9 +571,9 @@ CUSTOMER
 * [x] barbeiros;
 * [x] serviços;
 * [x] agendamentos;
-* [ ] pagamentos;
-* [ ] financeiro;
-* [ ] dashboard;
+* [x] pagamentos;
+* [x] financeiro;
+* [x] dashboard;
 * [ ] frontend inicial;
 * [ ] Docker Compose;
 * [ ] testes de integração.

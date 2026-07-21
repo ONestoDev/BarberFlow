@@ -5,6 +5,9 @@ from src.modules.appointments.routes import router as appointments_router
 from src.modules.barbers.routes import router as barbers_router
 from src.modules.customers.routes import router as customers_router
 from src.modules.services.routes import category_router, router as services_router
+from src.modules.payments.routes import router as payments_router
+from src.modules.finance.routes import router as finance_router
+from src.modules.dashboard.routes import router as dashboard_router
 from src.modules.users.routes import router as users_router
 from src.shared.config.settings import settings
 
@@ -20,6 +23,9 @@ app.include_router(barbers_router, prefix="/api/v1")
 app.include_router(customers_router, prefix="/api/v1")
 app.include_router(category_router, prefix="/api/v1")
 app.include_router(services_router, prefix="/api/v1")
+app.include_router(payments_router, prefix="/api/v1")
+app.include_router(finance_router, prefix="/api/v1")
+app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 
 
